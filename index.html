@@ -4,13 +4,13 @@
   <meta charset="UTF-8"/>
   <title>Panier de Sélections</title>
   <style>
-    /* 1) Corps du document transparent */
+    /* Corps transparent : pas de blanc global */
     html, body {
       margin: 0; padding: 0;
       background: transparent !important;
     }
 
-    /* 2) Plaque du panier */
+    /* --- Gradient + verre flouté UNIQUEMENT sur la plaque --- */
     .my-cart {
       background: linear-gradient(90deg, #FE4E26 0%, #FB167A 100%);
       backdrop-filter: blur(40px);
@@ -24,8 +24,8 @@
       margin: 40px auto;
     }
 
-    /* 3) Styles internes */
-    .cart-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
+    /* Styles intérieurs */
+    .cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .cart-count { font-weight: bold; font-size: 18px; }
     .cart-text { font-size: 14px; opacity: 0.9; }
     .cart-empty, .cart-msg { margin: 4px 0 12px; font-size: 14px; opacity: 0.8; }
@@ -51,13 +51,14 @@
         <span class="cart-text">sélection</span>
       </div>
     </div>
-    <p class="cart-empty">Ton panier est vide !</p>
+    <p class="cart-empty">Ton panier est vide !</p>
     <p class="cart-msg">Ajoute tes prestations en cliquant sur les boutons</p>
     <ul class="cart-list"></ul>
     <button class="cart-btn">Envoyez-nous le formulaire</button>
   </div>
 
   <script>
+    console.log('[IFRAME] Script démarré !');
     let cartCount = 0;
     const cartCountEl = document.querySelector('.cart-count');
     const cartEmptyEl = document.querySelector('.cart-empty');
@@ -66,11 +67,16 @@
 
     function updateCounter() {
       cartCountEl.textContent = cartCount;
-      cartEmptyEl.textContent = cartCount > 0 ? 'Vos prestations :' : 'Ton panier est vide !';
-      cartMsgEl.textContent = cartCount > 0 ? '' : 'Ajoute tes prestations en cliquant sur les boutons';
+      cartEmptyEl.textContent = cartCount > 0
+        ? 'Vos prestations :'
+        : 'Ton panier est vide !';
+      cartMsgEl.textContent = cartCount > 0
+        ? ''
+        : 'Ajoute tes prestations en cliquant sur les boutons';
     }
 
     function addItemToCart(itemName) {
+      console.log('[IFRAME] Ajout :', itemName);
       cartCount++;
       updateCounter();
       const li = document.createElement('li');
@@ -83,7 +89,9 @@
     }
 
     window.addEventListener('message', e => {
-      if (e.data?.action === 'addItem') addItemToCart(e.data.itemName);
+      if (e.data?.action === 'addItem') {
+        addItemToCart(e.data.itemName);
+      }
     });
   </script>
 </body>
