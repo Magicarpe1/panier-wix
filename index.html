@@ -4,13 +4,13 @@
   <meta charset="UTF-8"/>
   <title>Panier de Sélections</title>
   <style>
-    /* 1) On efface TOUT fond sur la page */
+    /* 1) Fond uni sur tout le document */
     html, body {
       margin: 0; padding: 0;
-      background: transparent !important;
+      background: #ffffff !important;
     }
 
-    /* 2) Gradient uniquement ici */
+    /* 2) Gradient + verre flouté sur la plaque seulement */
     .my-cart {
       background: linear-gradient(90deg, #FE4E26 0%, #FB167A 100%);
       background-clip: padding-box;
@@ -25,7 +25,7 @@
       margin: 40px auto;
     }
 
-    /* Le reste de ton style (inchangé) */
+    /* 3) Styles internes inchangés */
     .cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .cart-count { font-weight: bold; font-size: 18px; }
     .cart-text { font-size: 14px; opacity: 0.9; }
@@ -52,7 +52,7 @@
         <span class="cart-text">sélection</span>
       </div>
     </div>
-    <p class="cart-empty">Ton panier est vide !</p>
+    <p class="cart-empty">Ton panier est vide !</p>
     <p class="cart-msg">Ajoute tes prestations en cliquant sur les boutons</p>
     <ul class="cart-list"></ul>
     <button class="cart-btn">Envoyez-nous le formulaire</button>
