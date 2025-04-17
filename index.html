@@ -4,63 +4,31 @@
   <meta charset="UTF-8" />
   <title>Panier de Sélections</title>
   <style>
-    /* 1) Dégradé de fond sur tout l'écran */
     html, body {
       margin: 0; padding: 0; height: 100%;
       background: linear-gradient(90deg, #FE4E26 0%, #FB167A 100%);
     }
-
-    /* 2) Conteneur “verre flouté” */
     .my-cart {
-      /* verre blanc translucide */
-      background: rgba(255,255,255,0.15);
-      /* flou de l’arrière-plan */
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(100px);
-      /* coins très arrondis */
+      background: rgba(255,255,255,0.10);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
       border-radius: 40px;
-      /* spacing interne */
       padding: 20px;
       box-sizing: border-box;
-
-      /* ombre légère pour le relief */
       box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-
-      /* texte clair */
       color: #fff;
       width: 100%;
       max-width: 320px;
-      margin: 40px auto; /* centré si tu veux */
+      margin: 40px auto;
     }
-
-    /* 3) Styles internes identiques à précédemment */
-    .cart-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 12px;
-    }
-    .cart-count {
-      font-weight: bold; font-size: 18px;
-    }
-    .cart-text {
-      font-size: 14px; opacity: 0.9;
-    }
-    .cart-empty, .cart-msg {
-      margin: 4px 0 12px; font-size: 14px; opacity: 0.8;
-    }
-    .cart-list {
-      list-style: none; margin: 0; padding: 0;
-      max-height: 140px; overflow-y: auto;
-    }
-    .cart-item {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 8px 0;
-    }
-    .cart-item + .cart-item {
-      border-top: 1px solid rgba(255,255,255,0.6);
-    }
-    .remove-btn {
-      cursor: pointer; font-weight: bold; color: #fff; opacity: 0.8; margin-left: 8px;
-    }
+    .cart-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
+    .cart-count { font-weight: bold; font-size: 18px; }
+    .cart-text { font-size: 14px; opacity: 0.9; }
+    .cart-empty, .cart-msg { margin: 4px 0 12px; font-size: 14px; opacity: 0.8; }
+    .cart-list { list-style: none; margin: 0; padding: 0; max-height: 140px; overflow-y: auto; }
+    .cart-item { display: flex; justify-content: space-between; padding: 8px 0; }
+    .cart-item + .cart-item { border-top: 1px solid rgba(255,255,255,0.6); }
+    .remove-btn { cursor: pointer; font-weight: bold; color: #fff; opacity: 0.8; margin-left: 8px; }
     .remove-btn:hover { opacity: 1; }
     .cart-btn {
       display: block; width: 100%; margin-top: 16px;
@@ -86,7 +54,6 @@
   </div>
 
   <script>
-    console.log('[IFRAME] Script démarré !');
     let cartCount = 0;
     const cartCountEl = document.querySelector('.cart-count');
     const cartEmptyEl = document.querySelector('.cart-empty');
@@ -94,7 +61,6 @@
     const cartListEl = document.querySelector('.cart-list');
 
     function updateCounter() {
-      console.log('[IFRAME] Compteur à : ' + cartCount);
       cartCountEl.textContent = cartCount;
       if (cartCount > 0) {
         cartEmptyEl.textContent = 'Vos prestations :';
@@ -106,27 +72,21 @@
     }
 
     function addItemToCart(itemName) {
-      console.log('[IFRAME] Ajout : ' + itemName);
       cartCount++;
       updateCounter();
-
       const li = document.createElement('li');
       li.className = 'cart-item';
       li.innerHTML = `<span>${itemName}</span><span class="remove-btn">x</span>`;
-
       li.querySelector('.remove-btn').addEventListener('click', () => {
         li.remove();
         cartCount--;
         updateCounter();
-        console.log('[IFRAME] Supprimé : ' + itemName);
       });
-
       cartListEl.appendChild(li);
     }
 
-    window.addEventListener('message', (event) => {
-      console.log('[IFRAME] Message reçu :', event.data);
-      if (event.data && event.data.action === 'addItem') {
+    window.addEventListener('message', event => {
+      if (event.data?.action === 'addItem') {
         addItemToCart(event.data.itemName);
       }
     });
