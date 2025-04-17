@@ -4,7 +4,99 @@
   <meta charset="UTF-8" />
   <title>Panier de Sélections</title>
   <style>
-    /* [styles comme avant] */
+    /* Reset de base */
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+    }
+
+    /* Conteneur principal avec dégradé 90° (gauche → droite) */
+    .my-cart {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(90deg, #FE4E26 0%, #FB167A 100%);
+      border-radius: 40px;
+      padding: 20px;
+      box-sizing: border-box;
+      color: #fff;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    /* En-tête : compteur + titre */
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .cart-count {
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .cart-text {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    /* Messages vide / invitation */
+    .cart-empty,
+    .cart-msg {
+      margin: 4px 0 12px;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    /* Liste des items */
+    .cart-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: 140px;
+      overflow-y: auto;
+    }
+
+    /* Chaque prestation */
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+    }
+    /* Ligne de séparation blanche semi-transparente */
+    .cart-item + .cart-item {
+      border-top: 1px solid rgba(255,255,255,0.6);
+    }
+
+    /* Bouton de suppression “x” */
+    .remove-btn {
+      cursor: pointer;
+      font-weight: bold;
+      color: #fff;
+      opacity: 0.8;
+      margin-left: 8px;
+    }
+    .remove-btn:hover {
+      opacity: 1;
+    }
+
+    /* Bouton “Envoyer la demande” */
+    .cart-btn {
+      display: block;
+      width: 100%;
+      margin-top: 16px;
+      background: rgba(255,255,255,0.2);
+      border: none;
+      border-radius: 24px;
+      padding: 10px 0;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .cart-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
   </style>
 </head>
 <body>
@@ -67,5 +159,8 @@
       }
     });
   </script>
+</body>
+</html>
+
 </body>
 </html>
