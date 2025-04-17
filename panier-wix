@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Panier de Sélections</title>
+  <style>
+    /* [styles comme avant] */
+  </style>
+</head>
+<body>
+  <div class="my-cart">
+    <div class="cart-header">
+      <div>
+        <span class="cart-count">0</span>
+        <span class="cart-text">sélection</span>
+      </div>
+    </div>
+    <p class="cart-empty">Ton panier est vide !</p>
+    <p class="cart-msg">Ajoute tes prestations en cliquant sur les boutons</p>
+    <ul class="cart-list"></ul>
+    <button class="cart-btn">Envoyez-nous le formulaire</button>
+  </div>
+
+  <script>
+    console.log('[IFRAME] Script démarré !');
+    let cartCount = 0;
+    const cartCountEl = document.querySelector('.cart-count');
+    const cartEmptyEl = document.querySelector('.cart-empty');
+    const cartMsgEl = document.querySelector('.cart-msg');
+    const cartListEl = document.querySelector('.cart-list');
+
+    function updateCounter() {
+      console.log('[IFRAME] Compteur à : ' + cartCount);
+      cartCountEl.textContent = cartCount;
+      if (cartCount > 0) {
+        cartEmptyEl.textContent = 'Vos prestations :';
+        cartMsgEl.textContent = '';
+      } else {
+        cartEmptyEl.textContent = 'Ton panier est vide !';
+        cartMsgEl.textContent = 'Ajoute tes prestations en cliquant sur les boutons';
+      }
+    }
+
+    function addItemToCart(itemName) {
+      console.log('[IFRAME] Ajout : ' + itemName);
+      cartCount++;
+      updateCounter();
+
+      const li = document.createElement('li');
+      li.className = 'cart-item';
+      li.innerHTML = `<span>${itemName}</span><span class="remove-btn">x</span>`;
+
+      li.querySelector('.remove-btn').addEventListener('click', () => {
+        li.remove();
+        cartCount--;
+        updateCounter();
+        console.log('[IFRAME] Supprimé : ' + itemName);
+      });
+
+      cartListEl.appendChild(li);
+    }
+
+    window.addEventListener('message', (event) => {
+      console.log('[IFRAME] Message reçu :', event.data);
+      if (event.data && event.data.action === 'addItem') {
+        addItemToCart(event.data.itemName);
+      }
+    });
+  </script>
+</body>
+</html>
