@@ -4,14 +4,23 @@
   <meta charset="UTF-8" />
   <title>Panier de Sélections</title>
   <style>
+    /* --- 1) Suppression du dégradé global --- */
     html, body {
-      margin: 0; padding: 0; height: 100%;
-      background: linear-gradient(90deg, #FE4E26 0%, #FB167A 100%);
+      margin: 0; padding: 0;
+      background: transparent;
     }
+
+    /* --- 2) Plaque du panier avec gradient en fond et verre flouté --- */
     .my-cart {
-      background: rgba(255,255,255,0.10);
+      position: relative;
+      /* Gradient ONLY here */
+      background: linear-gradient(90deg, #FE4E26 0%, #FB167A 100%);
+      /* Glass effect */
+      background-clip: padding-box;       /* pour que border-radius s’applique correctement */
+      background-origin: border-box;
       backdrop-filter: blur(40px);
       -webkit-backdrop-filter: blur(40px);
+      /* Arrondi + ombre */
       border-radius: 40px;
       padding: 20px;
       box-sizing: border-box;
@@ -21,22 +30,70 @@
       max-width: 320px;
       margin: 40px auto;
     }
-    .cart-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
-    .cart-count { font-weight: bold; font-size: 18px; }
-    .cart-text { font-size: 14px; opacity: 0.9; }
-    .cart-empty, .cart-msg { margin: 4px 0 12px; font-size: 14px; opacity: 0.8; }
-    .cart-list { list-style: none; margin: 0; padding: 0; max-height: 140px; overflow-y: auto; }
-    .cart-item { display: flex; justify-content: space-between; padding: 8px 0; }
-    .cart-item + .cart-item { border-top: 1px solid rgba(255,255,255,0.6); }
-    .remove-btn { cursor: pointer; font-weight: bold; color: #fff; opacity: 0.8; margin-left: 8px; }
-    .remove-btn:hover { opacity: 1; }
-    .cart-btn {
-      display: block; width: 100%; margin-top: 16px;
-      background: rgba(255,255,255,0.2); border: none;
-      border-radius: 24px; padding: 10px 0; font-size: 14px;
-      color: #fff; cursor: pointer; transition: background 0.2s;
+
+    /* --- 3) Styles internes comme avant --- */
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
     }
-    .cart-btn:hover { background: rgba(255,255,255,0.3); }
+    .cart-count {
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .cart-text {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    .cart-empty,
+    .cart-msg {
+      margin: 4px 0 12px;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+    .cart-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: 140px;
+      overflow-y: auto;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+    }
+    .cart-item + .cart-item {
+      border-top: 1px solid rgba(255,255,255,0.6);
+    }
+    .remove-btn {
+      cursor: pointer;
+      font-weight: bold;
+      color: #fff;
+      opacity: 0.8;
+      margin-left: 8px;
+    }
+    .remove-btn:hover {
+      opacity: 1;
+    }
+    .cart-btn {
+      display: block;
+      width: 100%;
+      margin-top: 16px;
+      background: rgba(255,255,255,0.2);
+      border: none;
+      border-radius: 24px;
+      padding: 10px 0;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .cart-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
   </style>
 </head>
 <body>
@@ -47,13 +104,14 @@
         <span class="cart-text">sélection</span>
       </div>
     </div>
-    <p class="cart-empty">Ton panier est vide !</p>
+    <p class="cart-empty">Ton panier est vide !</p>
     <p class="cart-msg">Ajoute tes prestations en cliquant sur les boutons</p>
     <ul class="cart-list"></ul>
     <button class="cart-btn">Envoyez-nous le formulaire</button>
   </div>
 
   <script>
+    console.log('[IFRAME] Script démarré !');
     let cartCount = 0;
     const cartCountEl = document.querySelector('.cart-count');
     const cartEmptyEl = document.querySelector('.cart-empty');
@@ -63,15 +121,16 @@
     function updateCounter() {
       cartCountEl.textContent = cartCount;
       if (cartCount > 0) {
-        cartEmptyEl.textContent = 'Vos prestations :';
+        cartEmptyEl.textContent = 'Vos prestations :';
         cartMsgEl.textContent = '';
       } else {
-        cartEmptyEl.textContent = 'Ton panier est vide !';
+        cartEmptyEl.textContent = 'Ton panier est vide !';
         cartMsgEl.textContent = 'Ajoute tes prestations en cliquant sur les boutons';
       }
     }
 
     function addItemToCart(itemName) {
+      console.log('[IFRAME] Ajout :', itemName);
       cartCount++;
       updateCounter();
       const li = document.createElement('li');
@@ -81,11 +140,13 @@
         li.remove();
         cartCount--;
         updateCounter();
+        console.log('[IFRAME] Supprimé :', itemName);
       });
       cartListEl.appendChild(li);
     }
 
     window.addEventListener('message', event => {
+      console.log('[IFRAME] Message reçu :', event.data);
       if (event.data?.action === 'addItem') {
         addItemToCart(event.data.itemName);
       }
